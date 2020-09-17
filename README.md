@@ -1,4 +1,4 @@
-# vt-boilerplate
+# vt
 ![](https://github.com/nakuruwater/vt/workflows/Node.js%20CI/badge.svg)
 ![GitHub](https://img.shields.io/github/license/nakuruwater/vt)
 ![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/narwassco/vt)
@@ -141,4 +141,4 @@ However, these data under [data](./data) and `gh-pages` branch are owned and mai
 License](http://creativecommons.org/licenses/by/4.0/), which is different from main repository. You can use this data freely, but please mention our credit `©NARWASSCO,Ltd.` on attribution of your web application.
 
 ---
-Copyright (c) 2020 Jin IGARASHI
+Copyright (c) 2020 Nakuru Water and Sanitation Services Co., Ltd.
