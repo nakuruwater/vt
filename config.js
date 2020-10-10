@@ -53,6 +53,43 @@ module.exports = {
             `
         },
         {
+          name: 'sewer_line',
+          geojsonFileName: __dirname + '/sewer_line.geojson',
+          select: `
+          SELECT row_to_json(featurecollection) AS json FROM (
+              SELECT
+                'FeatureCollection' AS type,
+                array_to_json(array_agg(feature)) AS features
+              FROM (
+                SELECT
+                  'Feature' AS type,
+                  ST_AsGeoJSON(ST_Transform(ST_SetSRID(ST_MakeValid(geom),21037),4326))::json AS geometry,
+                  row_to_json((
+                    SELECT t FROM (
+                      SELECT
+                        16 as maxzoom,
+                        10 as minzoom
+                    ) AS t
+                  )) AS tippecanoe,
+                  row_to_json((
+                    SELECT p FROM (
+                      SELECT
+                        gid as fid, 
+                        owner, 
+                        owner_2, 
+                        material, 
+                        diameter, 
+                        CASE WHEN year_const = 0 THEN null ELSE year_const END as year_construction,
+                        town
+                    ) AS p
+                  )) AS properties
+                FROM sewer_line
+                WHERE NOT ST_IsEmpty(geom)
+              ) AS feature
+            ) AS featurecollection
+          `
+        },
+        {
           name: 'accounts',
           geojsonFileName: __dirname + '/accounts.geojson',
           select:`
@@ -427,6 +464,43 @@ module.exports = {
               ) AS p
               )) AS properties
                 FROM water_twrks
+              WHERE NOT ST_IsEmpty(geom)
+            ) AS feature
+          ) AS featurecollection
+          `
+        },
+        {
+          name: 'sewer_twrks',
+          geojsonFileName: __dirname + '/sewer_twrks.geojson',
+          select:`
+          SELECT row_to_json(featurecollection) AS json FROM (
+            SELECT
+              'FeatureCollection' AS type,
+              array_to_json(array_agg(feature)) AS features
+            FROM (
+              SELECT
+              'Feature' AS type,
+              ST_AsGeoJSON(ST_Transform(ST_SetSRID(ST_MakeValid(geom),21037),4326))::json AS geometry,
+              row_to_json((
+                SELECT t FROM (
+                  SELECT
+                    16 as maxzoom,
+                    8 as minzoom
+                ) AS t
+              )) AS tippecanoe,
+              row_to_json((
+                SELECT p FROM (
+                SELECT
+                gid as fid, 
+                name, 
+                type, 
+                dsgn_capct as design_capacity, 
+                op_capcty as operation_capacity, 
+                effl_src, 
+                other_wrks
+              ) AS p
+              )) AS properties
+                FROM sewer_twrks
               WHERE NOT ST_IsEmpty(geom)
             ) AS feature
           ) AS featurecollection
