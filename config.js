@@ -623,6 +623,13 @@ module.exports = {
             UNION ALL
             SELECT 
               gid as masterid, 
+              name,
+              'sewer_twrks' as layer,
+              ST_CENTROID(ST_Transform(ST_SetSRID(ST_MakeValid(geom),21037),4326)) as geom
+            FROM sewer_twrks
+            UNION ALL
+            SELECT 
+              gid as masterid, 
               zone, 
               'zones' as layer,
               ST_CENTROID(geom) as geom
